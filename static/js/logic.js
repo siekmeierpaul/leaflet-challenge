@@ -1,5 +1,4 @@
 function chooseColor(earthquakeDepth) {
-    console.log(earthquakeDepth);
     if (parseInt(earthquakeDepth) > 100) {
         return "black";
     } else if (parseInt(earthquakeDepth) > 75) {
@@ -14,7 +13,6 @@ function chooseColor(earthquakeDepth) {
 }  
 
 function createMap(earthquakeFeatures) {
-
     // Create the tile layer that will be the background of our map
     var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
       attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -40,11 +38,26 @@ function createMap(earthquakeFeatures) {
       layers: [darkmap, earthquakeFeatures]
     });
   
+    // Create a legend to display information about our map
+    var info = L.control({
+        position: "bottomright"
+    });
+    
+    // When the layer control is added, insert a div with the class of "legend"
+    info.onAdd = function() {
+        var div = L.DomUtil.create("div", "legend");
+        return div;
+    };
+    // Add the info legend to the map
+    info.addTo(map);
+  
     // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
     L.control.layers(baseMaps, overlayMaps, {
       collapsed: false
     }).addTo(map);
-  }
+    
+    document.querySelector(".legend").innerHTML = ["<p>Updated: " + "</p>"].join("");
+}
   
 function createMarkers(response) {
    console.log(response);
@@ -72,9 +85,11 @@ function createMarkers(response) {
   
     // Create a layer group made from the bike markers array, pass it into the createMap function
     createMap(L.layerGroup(earthquakes));
-  }
+}
   
+// Perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson").then(createMarkers);
   
-  // Perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
-  d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson").then(createMarkers);
-  
+
+
+    
