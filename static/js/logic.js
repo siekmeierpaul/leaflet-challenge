@@ -1,3 +1,18 @@
+function chooseColor(earthquakeDepth) {
+    console.log(earthquakeDepth);
+    if (parseInt(earthquakeDepth) > 100) {
+        return "black";
+    } else if (parseInt(earthquakeDepth) > 75) {
+        return "red";
+    } else if (parseInt(earthquakeDepth) > 50) {
+        return "orange";
+    } else if (parseInt(earthquakeDepth) > 25) {
+        return "yellow";
+    } else {
+        return "white";
+    }
+}  
+
 function createMap(earthquakeFeatures) {
 
     // Create the tile layer that will be the background of our map
@@ -31,7 +46,7 @@ function createMap(earthquakeFeatures) {
     }).addTo(map);
   }
   
-  function createMarkers(response) {
+function createMarkers(response) {
    console.log(response);
     // Pull the "features" property off of response
     var features = response.features;
@@ -46,8 +61,8 @@ function createMap(earthquakeFeatures) {
       // For each feature, create a circle and bind a popup with the feature's place
       var earthquake = L.circle([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {
         fillOpacity: 0.75,
-        color: "white",
-        fillColor: feature.geometry.coordinates[3],
+        color: "black",
+        fillColor: chooseColor(feature.geometry.coordinates[2]),
         radius: (feature.properties.mag * 10000)
       }).bindPopup("<h3>" + feature.properties.title + "</h3><h3>Place: " + feature.properties.place + "</h3>");
   
