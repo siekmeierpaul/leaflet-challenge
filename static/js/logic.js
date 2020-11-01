@@ -20,8 +20,8 @@ function createMap(earthquakeFeatures) {
   
     // Create the map object with options
     var map = L.map("mapid", {
-      center: [0, 0],
-      zoom: 1,
+      center: [61.2181, -149.9003],
+      zoom: 5,
       layers: [lightmap, earthquakeFeatures]
     });
   
@@ -36,16 +36,16 @@ function createMap(earthquakeFeatures) {
     // Pull the "stations" property off of response.data
     var features = response.features;
   
-    // Initialize an array to hold bike markers
+    // Initialize an array to hold earthquakes
     var earthquakes = [];
   
-    // Loop through the stations array
+    // Loop through the features array
     for (var index = 0; index < features.length; index++) {
       var feature = features[index];
   
-      // For each station, create a marker and bind a popup with the station's name
+      // For each feature, create a marker and bind a popup with the feature's place
       var earthquake = L.marker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]])
-        .bindPopup("<h3>" + feature.properties.place + "<h3><h3>Capacity: " + feature.properties.place + "</h3>");
+        .bindPopup("<h3>" + feature.properties.place + "</h3>");
   
       // Add the marker to the bikeMarkers array
       earthquakes.push(earthquake);
@@ -57,5 +57,5 @@ function createMap(earthquakeFeatures) {
   
   
   // Perform an API call to the Citi Bike API to get station information. Call createMarkers when complete
-  d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson").then(createMarkers);
+  d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson").then(createMarkers);
   
