@@ -16,7 +16,28 @@ html {
   font-weight: bold;
   line-height: 18px;
   color: #555;
-  background-color: white;
+  background-color: lightblue;
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.legend .deepest {
+  color : black;
+}
+
+.legend .deeper {
+  color : red;
+}
+
+.legend .deep {
+  color : orange;
+}
+
+.legend .kindaDeep {
+  color : yellow;
+}
+
+.legend .notDeep {
+  color : white;
 }

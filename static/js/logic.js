@@ -56,7 +56,14 @@ function createMap(earthquakeFeatures) {
       collapsed: false
     }).addTo(map);
     
-    document.querySelector(".legend").innerHTML = ["<p>Updated: " + "</p>"].join("");
+    document.querySelector(".legend").innerHTML = [
+        "<p>Depth of Earthquake: " + "</p>",
+        "<p class='deepest'>>100 km</p>",
+        "<p class='deeper'>>75-100 km</p>",
+        "<p class='deep'>>50-75 km</p>",
+        "<p class='kindaDeep'>>25-50 km</p>",
+        "<p class='notDeep'>0-25 km</p>"
+    ].join("");
 }
   
 function createMarkers(response) {
@@ -77,7 +84,8 @@ function createMarkers(response) {
         color: "black",
         fillColor: chooseColor(feature.geometry.coordinates[2]),
         radius: (feature.properties.mag * 10000)
-      }).bindPopup("<h3>" + feature.properties.title + "</h3><h3>Place: " + feature.properties.place + "</h3>");
+      }).bindPopup("<h3>" + feature.properties.title + "</h3><h3>Place: " + feature.properties.place + "</h3>" +
+                   "<h3>Depth: " + feature.geometry.coordinates[2] + "</h3><h3>Magnitude: " + feature.properties.mag + "</h3>");
   
       // Add the circle to the earthquakes array
       earthquakes.push(earthquake);
