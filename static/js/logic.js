@@ -1,16 +1,16 @@
 function createMap(earthquakeFeatures) {
 
     // Create the tile layer that will be the background of our map
-    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
       attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
       maxZoom: 18,
-      id: "light-v10",
+      id: "dark-v10",
       accessToken: API_KEY
     });
   
     // Create a baseMaps object to hold the lightmap layer
     var baseMaps = {
-      "Light Map": lightmap
+      "Map": darkmap
     };
   
     // Create an overlayMaps object to hold the bikeStations layer
@@ -20,9 +20,9 @@ function createMap(earthquakeFeatures) {
   
     // Create the map object with options
     var map = L.map("mapid", {
-      center: [61.2181, -149.9003],
-      zoom: 5,
-      layers: [lightmap, earthquakeFeatures]
+      center: [61.2181, -149.9003],    // centered on Anchorage, Alaska for family there
+      zoom: 6,
+      layers: [darkmap, earthquakeFeatures]
     });
   
     // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
@@ -33,7 +33,7 @@ function createMap(earthquakeFeatures) {
   
   function createMarkers(response) {
    console.log(response);
-    // Pull the "stations" property off of response.data
+    // Pull the "features" property off of response
     var features = response.features;
   
     // Initialize an array to hold earthquakes
@@ -43,11 +43,15 @@ function createMap(earthquakeFeatures) {
     for (var index = 0; index < features.length; index++) {
       var feature = features[index];
   
-      // For each feature, create a marker and bind a popup with the feature's place
-      var earthquake = L.marker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]])
-        .bindPopup("<h3>" + feature.properties.place + "</h3>");
+      // For each feature, create a circle and bind a popup with the feature's place
+      var earthquake = L.circle([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {
+        fillOpacity: 0.75,
+        color: "white",
+        fillColor: feature.geometry.coordinates[3],
+        radius: (feature.properties.mag * 10000)
+      }).bindPopup("<h3>" + feature.properties.title + "</h3><h3>Place: " + feature.properties.place + "</h3>");
   
-      // Add the marker to the bikeMarkers array
+      // Add the circle to the earthquakes array
       earthquakes.push(earthquake);
     }
   
